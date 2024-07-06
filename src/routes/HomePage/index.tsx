@@ -1,5 +1,11 @@
+import BaseLayout from "../../components/BaseLayout";
+
 const HomePage = () => {
-  return <p>This is homepage</p>;
+  return (
+    <BaseLayout>
+      <p>Ini adalah homepage</p>
+    </BaseLayout>
+  );
 };
 
 export default HomePage;
