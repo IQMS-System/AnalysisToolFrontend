@@ -2,7 +2,7 @@ import BaseLayout from "../../components/BaseLayout";
 
 const HomePage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home"]}>
       <p>Ini adalah homepage</p>
     </BaseLayout>
   );
