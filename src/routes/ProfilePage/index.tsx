@@ -2,7 +2,7 @@ import BaseLayout from "../../components/BaseLayout";
 
 const ProfilePage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home", "Profile"]}>
       <div>Ini profile page</div>
     </BaseLayout>
   );

@@ -2,7 +2,7 @@ import BaseLayout from "../../components/BaseLayout";
 
 const NotificationPage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home", "Notifications"]}>
       <div>Ini notification page</div>
     </BaseLayout>
   );

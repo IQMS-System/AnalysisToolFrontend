@@ -6,7 +6,7 @@ import { UserAddOutlined } from "@ant-design/icons";
 
 const UsersPage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home", "Users"]}>
       <Flex vertical gap={10}>
         <Flex justify="space-between">
           <Title level={3}>User Data Management</Title>

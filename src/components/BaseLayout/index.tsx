@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 interface Props {
   children: React.ReactNode;
+  breadCrumb: string[];
 }
 
 interface MenuItem {
@@ -96,7 +97,7 @@ const listMenu = menu.map((icon, index) => {
   };
 });
 
-const BaseLayout = ({ children }: Props) => {
+const BaseLayout = ({ children, breadCrumb }: Props) => {
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -139,9 +140,9 @@ const BaseLayout = ({ children }: Props) => {
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
+            {breadCrumb.map((item) => (
+              <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
+            ))}
           </Breadcrumb>
           <Content
             style={{

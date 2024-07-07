@@ -2,7 +2,7 @@ import BaseLayout from "../../components/BaseLayout";
 
 const QualityControlPage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home", "Quality Control"]}>
       <div>Ini quality page control</div>
     </BaseLayout>
   );

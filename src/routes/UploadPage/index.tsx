@@ -2,7 +2,7 @@ import BaseLayout from "../../components/BaseLayout";
 
 const UploadPage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadCrumb={["Home", "Upload"]}>
       <div>Ini upload page</div>
     </BaseLayout>
   );
