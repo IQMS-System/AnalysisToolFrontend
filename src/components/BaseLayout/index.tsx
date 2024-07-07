@@ -11,9 +11,17 @@ import {
   FileDoneOutlined,
   AlertOutlined,
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import {
+  Breadcrumb,
+  Button,
+  Flex,
+  Layout,
+  Menu,
+  Typography,
+  theme,
+} from "antd";
 import { useNavigate } from "react-router-dom";
+import iqmsIcon from "../../assets/icon-iqms.png";
 
 interface Props {
   children: React.ReactNode;
@@ -27,11 +35,7 @@ interface MenuItem {
 }
 
 const { Header, Content, Sider } = Layout;
-
-const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+const { Text } = Typography;
 
 const menu: MenuItem[] = [
   {
@@ -106,16 +110,23 @@ const BaseLayout = ({ children, breadCrumb }: Props) => {
   return (
     <Layout>
       <Header
-        style={{ display: "flex", alignItems: "center", minHeight: "8vh" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          minHeight: "8vh",
+          backgroundColor: "#4C7BAB",
+          justifyContent: "space-between",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
       >
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-          style={{ flex: 1, minWidth: 0 }}
-        />
+        <Flex>
+          <img src={iqmsIcon} alt="icon" width={100} />
+        </Flex>
+        <Flex gap={10}>
+          <Text className="text-white text-xl font-semibold">Ari</Text>
+          <Text className="text-white text-xl font-semibold">|</Text>
+          <Button ghost>Logout</Button>
+        </Flex>
       </Header>
       <Layout style={{ minHeight: "92vh" }}>
         <Sider width={230} style={{ background: colorBgContainer }}>
