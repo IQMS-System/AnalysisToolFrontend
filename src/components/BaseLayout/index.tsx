@@ -1,5 +1,16 @@
 import React, { ComponentClass, FunctionComponent } from "react";
-import { UsergroupAddOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  UsergroupAddOutlined,
+  UserOutlined,
+  ProductOutlined,
+  SettingOutlined,
+  InboxOutlined,
+  UploadOutlined,
+  SignatureOutlined,
+  ControlOutlined,
+  FileDoneOutlined,
+  AlertOutlined,
+} from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 
@@ -27,6 +38,38 @@ const menu: Menu[] = [
   {
     title: "Users",
     icon: UsergroupAddOutlined,
+  },
+  {
+    title: "Product",
+    icon: ProductOutlined,
+  },
+  {
+    title: "Approval Configuration",
+    icon: SettingOutlined,
+  },
+  {
+    title: "Approval Center",
+    icon: InboxOutlined,
+  },
+  {
+    title: "Upload",
+    icon: UploadOutlined,
+  },
+  {
+    title: "Operation",
+    icon: SignatureOutlined,
+  },
+  {
+    title: "Quality Control",
+    icon: ControlOutlined,
+  },
+  {
+    title: "Report",
+    icon: FileDoneOutlined,
+  },
+  {
+    title: "Notification",
+    icon: AlertOutlined,
   },
 ];
 
@@ -60,7 +103,7 @@ const BaseLayout = ({ children }: Props) => {
         />
       </Header>
       <Layout style={{ minHeight: "92vh" }}>
-        <Sider width={200} style={{ background: colorBgContainer }}>
+        <Sider width={230} style={{ background: colorBgContainer }}>
           <Menu
             mode="inline"
             defaultSelectedKeys={["1"]}
