@@ -10,7 +10,7 @@ const ApprovalConfigPage = () => {
     <BaseLayout breadCrumb={["Home", "Approval Configuration"]}>
       <Flex vertical gap={20}>
         <Flex justify="space-between">
-          <Title level={3}>Approval Configurations</Title>
+          <Title level={3}>Approval Configuration</Title>
         </Flex>
 
         <Flex justify="space-between" vertical>
