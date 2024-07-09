@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./LoginPage";
-import HomePage from "./HomePage";
 import PrivateRoutes from "../components/PrivateRoutes";
 import UsersPage from "./UsersPage";
 import ProfilePage from "./ProfilePage";
@@ -19,9 +18,8 @@ const MainRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
 
       <Route element={<PrivateRoutes />}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<ProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/approval-config" element={<ApprovalConfigPage />} />
         <Route path="/approval-center" element={<ApprovalCenterPage />} />

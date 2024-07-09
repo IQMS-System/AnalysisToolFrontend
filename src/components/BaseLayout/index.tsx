@@ -41,7 +41,7 @@ const menu: MenuItem[] = [
   {
     title: "Profile",
     icon: UserOutlined,
-    path: "/profile",
+    path: "/",
   },
   {
     title: "Users",
