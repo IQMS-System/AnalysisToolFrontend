@@ -80,7 +80,7 @@ const ApprovalListPage = () => {
   ];
 
   return (
-    <BaseLayout breadCrumb={["Home", "Approval Configuration"]}>
+    <BaseLayout breadCrumb={["Home", "Approval Configuration", "List"]}>
       <Flex vertical gap={20}>
         <Flex justify="space-between">
           <Title level={3}>Approval List</Title>

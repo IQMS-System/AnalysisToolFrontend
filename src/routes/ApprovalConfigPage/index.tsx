@@ -9,7 +9,7 @@ const ApprovalConfigPage = () => {
   const navigate = useNavigate();
 
   return (
-    <BaseLayout breadCrumb={["Home", "Approval Configuration", "List"]}>
+    <BaseLayout breadCrumb={["Home", "Approval Configuration"]}>
       <Flex vertical gap={20}>
         <Flex justify="space-between">
           <Title level={3}>Approval Configuration</Title>
