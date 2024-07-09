@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Typography } from "antd";
+import { Button, Card, Flex, Modal, Typography } from "antd";
 import BaseLayout from "../../components/BaseLayout";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -29,7 +29,23 @@ const ProductPage = () => {
 
         <Flex wrap justify="center" gap={50}>
           {dummyData.map((card) => (
-            <Card style={{ width: 300, textAlign: "center" }} key={card}>
+            <Card
+              style={{ width: 300, textAlign: "center" }}
+              key={card}
+              hoverable
+              onClick={() => {
+                Modal.confirm({
+                  title: "Select Action",
+                  footer: () => (
+                    <>
+                      <Button>View</Button>
+                      <Button type="primary">Update</Button>
+                    </>
+                  ),
+                  maskClosable: true,
+                });
+              }}
+            >
               <Text strong>{card}</Text>
             </Card>
           ))}
