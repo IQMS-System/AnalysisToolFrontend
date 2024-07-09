@@ -29,7 +29,15 @@ const ApprovalConfigPage = () => {
                   >
                     View
                   </Button>
-                  <Button type="primary">Update</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      Modal.destroyAll();
+                      navigate("/approval-config/edit");
+                    }}
+                  >
+                    Update
+                  </Button>
                 </>
               ),
               maskClosable: true,

@@ -12,6 +12,7 @@ import QualityControlPage from "./QualityControlPage";
 import ReportPage from "./ReportPage";
 import NotificationPage from "./NotificationPage";
 import ApprovalListPage from "./ApprovalConfigPage/ApprovalList";
+import ApprovalEditPage from "./ApprovalConfigPage/ApprovalEdit";
 
 const MainRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const MainRoutes = () => {
         <Route path="/product" element={<ProductPage />} />
         <Route path="/approval-config" element={<ApprovalConfigPage />} />
         <Route path="/approval-config/read" element={<ApprovalListPage />} />
+        <Route path="/approval-config/edit" element={<ApprovalEditPage />} />
         <Route path="/approval-center" element={<ApprovalCenterPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/operation" element={<OperationPage />} />
