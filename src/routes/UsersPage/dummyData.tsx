@@ -1,48 +1,9 @@
-import { Button, Space, TableProps } from "antd";
-
 interface DataType {
   key: string;
   fullName: string;
   username: string;
   level: string;
 }
-
-export const columnsUsers: TableProps<DataType>["columns"] = [
-  {
-    title: "No",
-    dataIndex: "key",
-    key: "number",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Full Name",
-    dataIndex: "fullName",
-    key: "fullName",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Username",
-    dataIndex: "username",
-    key: "username",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Level",
-    dataIndex: "level",
-    key: "level",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <Space size="middle">
-        <Button type="primary">Edit</Button>
-        <Button>Reset Password</Button>
-      </Space>
-    ),
-  },
-];
 
 export const dataUsers: DataType[] = [
   {
