@@ -11,6 +11,7 @@ import OperationPage from "./OperationPage";
 import QualityControlPage from "./QualityControlPage";
 import ReportPage from "./ReportPage";
 import NotificationPage from "./NotificationPage";
+import ApprovalListPage from "./ApprovalConfigPage/ApprovalList";
 
 const MainRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const MainRoutes = () => {
         <Route path="/users" element={<UsersPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/approval-config" element={<ApprovalConfigPage />} />
+        <Route path="/approval-config/read" element={<ApprovalListPage />} />
         <Route path="/approval-center" element={<ApprovalCenterPage />} />
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/operation" element={<OperationPage />} />

@@ -4,7 +4,11 @@ import { Content } from "antd/es/layout/layout";
 const { Text } = Typography;
 const { Option } = Select;
 
-const ProductHierarchy = () => {
+interface Props {
+  onSubmit?: () => void;
+}
+
+const ProductHierarchy = ({ onSubmit }: Props) => {
   return (
     <Flex justify="space-between" vertical>
       <Content style={{ padding: "20px" }}>
@@ -76,7 +80,7 @@ const ProductHierarchy = () => {
           </Flex>
         </Flex>
 
-        <Button type="primary" className="mt-10">
+        <Button type="primary" className="mt-10" onClick={onSubmit}>
           Submit
         </Button>
       </Content>

@@ -1,18 +1,41 @@
-import { Flex, Typography } from "antd";
+import { Button, Flex, Modal, Typography } from "antd";
 import BaseLayout from "../../components/BaseLayout";
 import ProductHierarchy from "../../components/ProductHierarchy";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const ApprovalConfigPage = () => {
+  const navigate = useNavigate();
+
   return (
-    <BaseLayout breadCrumb={["Home", "Approval Configuration"]}>
+    <BaseLayout breadCrumb={["Home", "Approval Configuration", "List"]}>
       <Flex vertical gap={20}>
         <Flex justify="space-between">
           <Title level={3}>Approval Configuration</Title>
         </Flex>
 
-        <ProductHierarchy />
+        <ProductHierarchy
+          onSubmit={() => {
+            Modal.confirm({
+              title: "Select Action",
+              footer: () => (
+                <>
+                  <Button
+                    onClick={() => {
+                      Modal.destroyAll();
+                      navigate("/approval-config/read");
+                    }}
+                  >
+                    View
+                  </Button>
+                  <Button type="primary">Update</Button>
+                </>
+              ),
+              maskClosable: true,
+            });
+          }}
+        />
       </Flex>
     </BaseLayout>
   );
