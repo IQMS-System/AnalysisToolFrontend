@@ -1,5 +1,13 @@
-import { Descriptions, DescriptionsProps, Flex, Typography } from "antd";
+import {
+  Button,
+  Descriptions,
+  DescriptionsProps,
+  Flex,
+  Typography,
+} from "antd";
 import BaseLayout from "../../components/BaseLayout";
+import { useState } from "react";
+import ModalResetPassword from "./ModalResetPassword";
 
 const { Title } = Typography;
 
@@ -22,6 +30,8 @@ const items: DescriptionsProps["items"] = [
 ];
 
 const ProfilePage = () => {
+  const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
+
   return (
     <BaseLayout breadCrumb={["Home", "Profile"]}>
       <Flex vertical gap={10}>
@@ -29,7 +39,22 @@ const ProfilePage = () => {
           <Title level={3}>User Profile</Title>
         </Flex>
         <Descriptions items={items} column={1} />
+        <Flex gap={20}>
+          <Button type="primary" onClick={() => setIsOpenResetPassword(true)}>
+            Change Password
+          </Button>
+          <Button danger ghost>
+            Logout
+          </Button>
+        </Flex>
       </Flex>
+
+      <ModalResetPassword
+        handleCancel={() => setIsOpenResetPassword(false)}
+        handleOk={() => setIsOpenResetPassword(false)}
+        loading={false}
+        open={isOpenResetPassword}
+      />
     </BaseLayout>
   );
 };
