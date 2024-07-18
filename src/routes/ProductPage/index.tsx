@@ -1,6 +1,7 @@
 import { Button, Card, Flex, Modal, Typography } from "antd";
 import BaseLayout from "../../components/BaseLayout";
 import { PlusOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -17,6 +18,8 @@ const dummyData = [
 ];
 
 const ProductPage = () => {
+  const navigate = useNavigate();
+
   return (
     <BaseLayout breadCrumb={["Home", "Products"]}>
       <Flex vertical gap={50}>
@@ -38,7 +41,14 @@ const ProductPage = () => {
                   title: "Select Action",
                   footer: () => (
                     <>
-                      <Button>View</Button>
+                      <Button
+                        onClick={() => {
+                          Modal.destroyAll();
+                          navigate("/product/detail");
+                        }}
+                      >
+                        View
+                      </Button>
                       <Button type="primary">Update</Button>
                     </>
                   ),

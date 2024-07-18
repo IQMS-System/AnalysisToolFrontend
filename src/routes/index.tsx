@@ -13,6 +13,7 @@ import ReportPage from "./ReportPage";
 import NotificationPage from "./NotificationPage";
 import ApprovalListPage from "./ApprovalConfigPage/ApprovalList";
 import ApprovalEditPage from "./ApprovalConfigPage/ApprovalEdit";
+import ProductDetailPage from "./ProductPage/ProductDetail";
 
 const MainRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const MainRoutes = () => {
         <Route path="/" element={<ProfilePage />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/product" element={<ProductPage />} />
+        <Route path="/product/detail" element={<ProductDetailPage />} />
         <Route path="/approval-config" element={<ApprovalConfigPage />} />
         <Route path="/approval-config/read" element={<ApprovalListPage />} />
         <Route path="/approval-config/edit" element={<ApprovalEditPage />} />
