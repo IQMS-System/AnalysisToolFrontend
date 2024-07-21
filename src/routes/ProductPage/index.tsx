@@ -25,7 +25,11 @@ const ProductPage = () => {
       <Flex vertical gap={50}>
         <Flex justify="space-between">
           <Title level={3}>Product Management</Title>
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => navigate("/product/create")}
+          >
             Create a Product Hierarchy Template
           </Button>
         </Flex>
