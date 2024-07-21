@@ -1,5 +1,6 @@
 import React from "react";
-import { Table, Input } from "antd";
+import { Table, Input, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 interface Specification {
   key: string;
@@ -10,11 +11,13 @@ interface Specification {
 interface SpecificationTableProps {
   specifications: Specification[];
   onSpecChange: (index: number, field: string, value: string) => void;
+  addSpecification: () => void; // New prop to add a specification
 }
 
 const SpecificationTable: React.FC<SpecificationTableProps> = ({
   specifications,
   onSpecChange,
+  addSpecification,
 }) => {
   const columns = [
     {
@@ -44,12 +47,22 @@ const SpecificationTable: React.FC<SpecificationTableProps> = ({
   ];
 
   return (
-    <Table
-      dataSource={specifications}
-      columns={columns}
-      rowKey="key"
-      pagination={false}
-    />
+    <div>
+      <Table
+        dataSource={specifications}
+        columns={columns}
+        rowKey="key"
+        pagination={false}
+      />
+      <Button
+        onClick={addSpecification}
+        type="default"
+        className="mt-5 mb-14"
+        icon={<PlusOutlined />}
+      >
+        Add Row
+      </Button>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Form, Input, Button } from "antd";
+import SpecificationTable from "./SpesificationTable";
 
 const { Item: FormItem } = Form;
 
@@ -236,6 +237,75 @@ const AssemblyForm: React.FC = () => {
     }
   };
 
+  const addSpecification = (
+    id: string,
+    type: "assembly" | "subAssembly" | "part" | "subPart"
+  ) => {
+    const newSpec: Specification = {
+      key: Date.now().toString(),
+      featureName: "",
+      nominalDimension: "",
+    };
+
+    const updateSpecs = (specs: Specification[]) => [...specs, newSpec];
+
+    switch (type) {
+      case "assembly":
+        setAssembly((prevAssembly) => ({
+          ...prevAssembly,
+          specifications: updateSpecs(prevAssembly.specifications),
+        }));
+        break;
+      case "subAssembly":
+        setAssembly((prevAssembly) => ({
+          ...prevAssembly,
+          subAssemblies: prevAssembly.subAssemblies.map((subAssembly) =>
+            subAssembly.id === id
+              ? {
+                  ...subAssembly,
+                  specifications: updateSpecs(subAssembly.specifications),
+                }
+              : subAssembly
+          ),
+        }));
+        break;
+      case "part":
+        setAssembly((prevAssembly) => ({
+          ...prevAssembly,
+          subAssemblies: prevAssembly.subAssemblies.map((subAssembly) => ({
+            ...subAssembly,
+            parts: subAssembly.parts.map((part) =>
+              part.id === id
+                ? { ...part, specifications: updateSpecs(part.specifications) }
+                : part
+            ),
+          })),
+        }));
+        break;
+      case "subPart":
+        setAssembly((prevAssembly) => ({
+          ...prevAssembly,
+          subAssemblies: prevAssembly.subAssemblies.map((subAssembly) => ({
+            ...subAssembly,
+            parts: subAssembly.parts.map((part) => ({
+              ...part,
+              subParts: part.subParts.map((subPart) =>
+                subPart.id === id
+                  ? {
+                      ...subPart,
+                      specifications: updateSpecs(subPart.specifications),
+                    }
+                  : subPart
+              ),
+            })),
+          })),
+        }));
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleSpecChange = (
     index: number,
     field: string,
@@ -327,6 +397,15 @@ const AssemblyForm: React.FC = () => {
               Edit Specification
             </Button>
           </FormItem>
+          {assembly.showSpecifications && (
+            <SpecificationTable
+              specifications={assembly.specifications}
+              onSpecChange={(index, field, value) =>
+                handleSpecChange(index, field, value, assembly.id, "assembly")
+              }
+              addSpecification={() => addSpecification(assembly.id, "assembly")}
+            />
+          )}
         </Form>
         <Row gutter={[16, 16]}>
           {assembly.subAssemblies.map((subAssembly) => (
@@ -357,6 +436,23 @@ const AssemblyForm: React.FC = () => {
                       Edit Specification
                     </Button>
                   </FormItem>
+                  {subAssembly.showSpecifications && (
+                    <SpecificationTable
+                      specifications={subAssembly.specifications}
+                      onSpecChange={(index, field, value) =>
+                        handleSpecChange(
+                          index,
+                          field,
+                          value,
+                          subAssembly.id,
+                          "subAssembly"
+                        )
+                      }
+                      addSpecification={() =>
+                        addSpecification(subAssembly.id, "subAssembly")
+                      }
+                    />
+                  )}
                 </Form>
                 <Row gutter={[16, 16]}>
                   {subAssembly.parts.map((part) => (
@@ -393,6 +489,23 @@ const AssemblyForm: React.FC = () => {
                               Edit Specification
                             </Button>
                           </FormItem>
+                          {part.showSpecifications && (
+                            <SpecificationTable
+                              specifications={part.specifications}
+                              onSpecChange={(index, field, value) =>
+                                handleSpecChange(
+                                  index,
+                                  field,
+                                  value,
+                                  part.id,
+                                  "part"
+                                )
+                              }
+                              addSpecification={() =>
+                                addSpecification(part.id, "part")
+                              }
+                            />
+                          )}
                         </Form>
                         <Row gutter={[16, 16]}>
                           {part.subParts.map((subPart) => (
@@ -415,6 +528,7 @@ const AssemblyForm: React.FC = () => {
                                     />
                                   </FormItem>
                                   <Button
+                                    className="mb-5"
                                     onClick={() =>
                                       toggleSpecifications(
                                         subPart.id,
@@ -424,6 +538,23 @@ const AssemblyForm: React.FC = () => {
                                   >
                                     Edit Specification
                                   </Button>
+                                  {subPart.showSpecifications && (
+                                    <SpecificationTable
+                                      specifications={subPart.specifications}
+                                      onSpecChange={(index, field, value) =>
+                                        handleSpecChange(
+                                          index,
+                                          field,
+                                          value,
+                                          subPart.id,
+                                          "subPart"
+                                        )
+                                      }
+                                      addSpecification={() =>
+                                        addSpecification(subPart.id, "subPart")
+                                      }
+                                    />
+                                  )}
                                 </Form>
                               </Card>
                             </Col>
