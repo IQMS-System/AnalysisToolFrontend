@@ -1,6 +1,7 @@
-import { Button, Space, TableProps } from "antd";
+import { Button, Switch, Tag } from "antd";
+import { ColumnsType } from "antd/es/table";
 
-interface DataType {
+export interface DataType {
   key: string;
   uniqueId: string;
   partName: string;
@@ -11,58 +12,31 @@ interface DataType {
   status: string;
 }
 
-export const columnApproval: TableProps<DataType>["columns"] = [
-  {
-    title: "No",
-    dataIndex: "key",
-    key: "number",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Unique ID",
-    dataIndex: "uniqueId",
-    key: "uniqueId",
-  },
-  {
-    title: "Part Name",
-    dataIndex: "partName",
-    key: "partName",
-  },
-  {
-    title: "Maker",
-    dataIndex: "maker",
-    key: "maker",
-  },
-  {
-    title: "Approver",
-    dataIndex: "approver",
-    key: "approver",
-  },
-  {
-    title: "Created At",
-    dataIndex: "createdAt",
-    key: "createdAt",
-  },
-  {
-    title: "Confirmed At",
-    dataIndex: "confirmedAt",
-    key: "confirmedAt",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <Space size="middle">
-        <Button type="primary">Detail</Button>
-      </Space>
-    ),
-  },
-];
+export interface HistoryDataType {
+  key: string;
+  approver: string;
+  approverRole: string;
+  approvalPriority: number;
+  status: string;
+  approvalTime: string;
+}
+
+interface RuleDataType {
+  key: string;
+  approvalPriority: number;
+  approver: string;
+  approverRole: string;
+  isRequired: boolean;
+}
+
+interface ChecksheetEntryType {
+  key: string;
+  checksheetEntryUniqueId: string;
+  startTime: string;
+  startedBy: string;
+  submissionTime: string;
+  submittedBy: string;
+}
 
 export const dataApproval: DataType[] = [
   {
@@ -114,5 +88,177 @@ export const dataApproval: DataType[] = [
     createdAt: "2023-01-09",
     confirmedAt: "2023-01-10",
     status: "Pending",
+  },
+];
+
+export const columnsHistory: ColumnsType<HistoryDataType> = [
+  {
+    title: "Approver",
+    dataIndex: "approver",
+    key: "approver",
+  },
+  {
+    title: "Approver Role",
+    dataIndex: "approverRole",
+    key: "approverRole",
+  },
+  {
+    title: "Approval Priority",
+    dataIndex: "approvalPriority",
+    key: "approvalPriority",
+    sorter: (a: HistoryDataType, b: HistoryDataType) =>
+      a.approvalPriority - b.approvalPriority,
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (status: string) => {
+      const color =
+        status === "Approved" ? "green" : status === "Pending" ? "gold" : "red";
+      return <Tag color={color}>{status.toUpperCase()}</Tag>;
+    },
+  },
+  {
+    title: "Approval Time",
+    dataIndex: "approvalTime",
+    key: "approvalTime",
+  },
+  {
+    title: "Action",
+    key: "action",
+    render: () => <Button type="link">View</Button>,
+  },
+];
+
+export const columnsRule: ColumnsType<RuleDataType> = [
+  {
+    title: "Approval Priority",
+    dataIndex: "approvalPriority",
+    key: "approvalPriority",
+    sorter: (a: RuleDataType, b: RuleDataType) =>
+      a.approvalPriority - b.approvalPriority,
+  },
+  {
+    title: "Approver",
+    dataIndex: "approver",
+    key: "approver",
+  },
+  {
+    title: "Approver Role",
+    dataIndex: "approverRole",
+    key: "approverRole",
+  },
+  {
+    title: "Is Required",
+    dataIndex: "isRequired",
+    key: "isRequired",
+    render: (isRequired: boolean) => <Switch checked={isRequired} disabled />,
+  },
+];
+
+export const dataRule: RuleDataType[] = [
+  {
+    key: "1",
+    approvalPriority: 1,
+    approver: "John Brown",
+    approverRole: "Manager",
+    isRequired: true,
+  },
+  {
+    key: "2",
+    approvalPriority: 2,
+    approver: "Jim Green",
+    approverRole: "Supervisor",
+    isRequired: false,
+  },
+  {
+    key: "3",
+    approvalPriority: 3,
+    approver: "Joe Black",
+    approverRole: "Director",
+    isRequired: true,
+  },
+];
+
+export const dataTableHistory: HistoryDataType[] = [
+  {
+    key: "1",
+    approver: "John Brown",
+    approverRole: "Manager",
+    approvalPriority: 1,
+    status: "Approved",
+    approvalTime: "2024-07-19 10:00:00",
+  },
+  {
+    key: "2",
+    approver: "Jim Green",
+    approverRole: "Supervisor",
+    approvalPriority: 2,
+    status: "Pending",
+    approvalTime: "2024-07-19 11:00:00",
+  },
+  {
+    key: "3",
+    approver: "Joe Black",
+    approverRole: "Director",
+    approvalPriority: 3,
+    status: "Rejected",
+    approvalTime: "2024-07-19 12:00:00",
+  },
+];
+
+export const columnsChecksheet: ColumnsType<ChecksheetEntryType> = [
+  {
+    title: "Checksheet Entry Unique Id",
+    dataIndex: "checksheetEntryUniqueId",
+    key: "checksheetEntryUniqueId",
+  },
+  {
+    title: "Start Time",
+    dataIndex: "startTime",
+    key: "startTime",
+  },
+  {
+    title: "Started By",
+    dataIndex: "startedBy",
+    key: "startedBy",
+  },
+  {
+    title: "Submission Time",
+    dataIndex: "submissionTime",
+    key: "submissionTime",
+  },
+  {
+    title: "Submitted By",
+    dataIndex: "submittedBy",
+    key: "submittedBy",
+  },
+];
+
+export const dataChecksheet: ChecksheetEntryType[] = [
+  {
+    key: "1",
+    checksheetEntryUniqueId: "C123",
+    startTime: "2024-07-19 08:00:00",
+    startedBy: "Alice Smith",
+    submissionTime: "2024-07-19 10:00:00",
+    submittedBy: "Bob Johnson",
+  },
+  {
+    key: "2",
+    checksheetEntryUniqueId: "C124",
+    startTime: "2024-07-19 09:00:00",
+    startedBy: "Charlie Brown",
+    submissionTime: "2024-07-19 11:00:00",
+    submittedBy: "David Williams",
+  },
+  {
+    key: "3",
+    checksheetEntryUniqueId: "C125",
+    startTime: "2024-07-19 10:00:00",
+    startedBy: "Eve Davis",
+    submissionTime: "2024-07-19 12:00:00",
+    submittedBy: "Frank Miller",
   },
 ];
