@@ -1,7 +1,17 @@
 import ProductHierarchy from "../../components/ProductHierarchy";
 
-const ChecksheetSection = () => {
-  return <ProductHierarchy />;
+interface Props {
+  handleToggleShowTemplate: (status: boolean) => void;
+}
+
+const ChecksheetSection = ({ handleToggleShowTemplate }: Props) => {
+  return (
+    <ProductHierarchy
+      onSubmit={() => {
+        handleToggleShowTemplate(true);
+      }}
+    />
+  );
 };
 
 export default ChecksheetSection;
