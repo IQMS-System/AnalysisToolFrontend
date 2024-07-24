@@ -2,7 +2,11 @@ import { Button, Form, Input, Modal } from "antd";
 
 interface Props {
   open: boolean;
-  handleOk: () => void;
+  handleOk: (
+    oldPass: string,
+    newPass: string,
+    confirmPass: string
+  ) => Promise<void>;
   handleCancel: () => void;
   loading: boolean;
 }
@@ -19,11 +23,17 @@ const ModalResetPassword = ({
   loading,
   open,
 }: Props) => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: FieldType) => {
+    const { previousPassword, password, confirmPassword } = values;
+    await handleOk(previousPassword!, password!, confirmPassword!);
+  };
+
   return (
     <Modal
       open={open}
       title="Change Password User"
-      onOk={handleOk}
       onCancel={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
@@ -33,19 +43,21 @@ const ModalResetPassword = ({
           key="submit"
           type="primary"
           loading={loading}
-          onClick={handleOk}
+          onClick={() => {
+            form.submit();
+          }}
         >
           Reset
         </Button>,
       ]}
     >
       <Form
+        form={form}
         initialValues={{ remember: true }}
-        onFinish={() => {}}
-        onFinishFailed={() => {}}
         autoComplete="off"
         className="mt-5"
         labelCol={{ span: 8 }}
+        onFinish={onFinish}
       >
         <Form.Item<FieldType>
           label="Previous Password"

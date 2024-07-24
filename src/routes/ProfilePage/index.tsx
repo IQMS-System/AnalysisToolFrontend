@@ -4,6 +4,7 @@ import {
   DescriptionsProps,
   Flex,
   Typography,
+  message,
 } from "antd";
 import BaseLayout from "../../components/BaseLayout";
 import { useState } from "react";
@@ -13,9 +14,9 @@ import useAuth from "../../hooks/useAuth";
 const { Title } = Typography;
 
 const ProfilePage = () => {
-  const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
+  const { user, changePassword } = useAuth();
 
-  const { user } = useAuth();
+  const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
 
   const items: DescriptionsProps["items"] = [
     {
@@ -25,7 +26,7 @@ const ProfilePage = () => {
     },
     {
       key: "2",
-      label: "Email",
+      label: "Username",
       children: user?.email,
     },
     {
@@ -34,6 +35,34 @@ const ProfilePage = () => {
       children: user?.role,
     },
   ];
+
+  const handleSubmitResetPassword = async (
+    oldPass: string,
+    newPass: string,
+    confirmPass: string
+  ) => {
+    try {
+      const response = await changePassword({
+        confirmation_password: confirmPass,
+        new_password: newPass,
+        old_password: oldPass,
+      });
+
+      if (response.status_code === 200) {
+        message.open({
+          type: "success",
+          content: "Success Reset Password",
+        });
+
+        setIsOpenResetPassword(false);
+      }
+    } catch (err) {
+      message.open({
+        type: "error",
+        content: "Please check password again",
+      });
+    }
+  };
 
   return (
     <BaseLayout breadCrumb={["Home", "Profile"]}>
@@ -53,8 +82,8 @@ const ProfilePage = () => {
       </Flex>
 
       <ModalResetPassword
+        handleOk={handleSubmitResetPassword}
         handleCancel={() => setIsOpenResetPassword(false)}
-        handleOk={() => setIsOpenResetPassword(false)}
         loading={false}
         open={isOpenResetPassword}
       />

@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { apiFetchUser, apiLogin } from "../../api/fetchers";
-import { LoginPayload, UserResponse } from "./types";
+import { apiFetchUser, apiLogin, apiResetPassword } from "../../api/fetchers";
+import {
+  LoginPayload,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
+  UserResponse,
+} from "./types";
 
 const useAuth = () => {
   const [accessToken, setAccessToken] = useState<string | null>(() =>
@@ -33,6 +38,18 @@ const useAuth = () => {
     return response;
   };
 
+  const changePassword = async (
+    payload: ResetPasswordPayload
+  ): Promise<ResetPasswordResponse> => {
+    const response = await apiResetPassword(
+      payload.old_password,
+      payload.new_password,
+      payload.confirmation_password
+    );
+
+    return response;
+  };
+
   const userData = user?.data.user;
 
   useEffect(() => {
@@ -49,6 +66,7 @@ const useAuth = () => {
     isLoading: !error && !user,
     isError: error,
     isAuthenticated: !!accessToken,
+    changePassword,
   };
 };
 
