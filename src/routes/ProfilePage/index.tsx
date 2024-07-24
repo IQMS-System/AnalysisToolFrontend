@@ -8,29 +8,32 @@ import {
 import BaseLayout from "../../components/BaseLayout";
 import { useState } from "react";
 import ModalResetPassword from "./ModalResetPassword";
+import useAuth from "../../hooks/useAuth";
 
 const { Title } = Typography;
 
-const items: DescriptionsProps["items"] = [
-  {
-    key: "1",
-    label: "Name",
-    children: "Budi Santoso",
-  },
-  {
-    key: "2",
-    label: "Username",
-    children: "budi_santoso",
-  },
-  {
-    key: "3",
-    label: "Level",
-    children: "Admin",
-  },
-];
-
 const ProfilePage = () => {
   const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
+
+  const { user } = useAuth();
+
+  const items: DescriptionsProps["items"] = [
+    {
+      key: "1",
+      label: "Name",
+      children: user?.name,
+    },
+    {
+      key: "2",
+      label: "Email",
+      children: user?.email,
+    },
+    {
+      key: "3",
+      label: "Level",
+      children: user?.role,
+    },
+  ];
 
   return (
     <BaseLayout breadCrumb={["Home", "Profile"]}>
