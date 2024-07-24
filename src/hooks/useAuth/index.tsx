@@ -17,7 +17,7 @@ const useAuth = () => {
 
   const { data: user, error } = useSWR<UserResponse>(
     accessToken ? ["user", accessToken] : null,
-    ([, token]: [string, string]) => apiFetchUser(token),
+    () => apiFetchUser(),
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,

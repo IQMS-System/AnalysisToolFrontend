@@ -24,11 +24,12 @@ export const apiResetPassword = async (
   return response.data;
 };
 
-export const apiFetchUser = async (accessToken: string) => {
-  const response = await apiClient.get(`${API_URL}/profile`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const apiFetchUser = async () => {
+  const response = await apiClient.get(`${API_URL}/profile`);
+  return response.data;
+};
+
+export const apiFetchUserList = async () => {
+  const response = await apiClient.get(`${API_URL}/user-configuration`);
   return response.data;
 };

@@ -1,21 +1,22 @@
 import { Button, Flex, Space, Table, TableProps } from "antd";
 import BaseLayout from "../../components/BaseLayout";
-import { dataUsers } from "./dummyData";
 import Title from "antd/es/typography/Title";
 import { UserAddOutlined } from "@ant-design/icons";
 import ModalAddUser from "./ModalAddUser";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ModalEditUser from "./ModalEditUser";
 import ModalResetPassword from "./ModalResetPassword";
+import useUser from "../../hooks/useUser";
 
 interface DataType {
-  key: string;
+  key: number;
   fullName: string;
-  username: string;
-  level: string;
+  email: string;
+  level: "ADMIN" | "SUPERVISOR" | "OPERATOR";
 }
 
 const UsersPage = () => {
+  const { listUser, isLoading } = useUser();
   const [isOpenAddUser, setIsOpenAddUser] = useState(false);
   const [isOpenEditUser, setIsOpenEditUser] = useState(false);
   const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
@@ -34,9 +35,9 @@ const UsersPage = () => {
       render: (text) => <a>{text}</a>,
     },
     {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
       render: (text) => <a>{text}</a>,
     },
     {
@@ -61,6 +62,17 @@ const UsersPage = () => {
     },
   ];
 
+  const normalizedData: DataType[] = useMemo(() => {
+    return listUser.map((user) => {
+      return {
+        email: user.email,
+        fullName: user.name,
+        level: user.role,
+        key: user.id,
+      };
+    });
+  }, [listUser]);
+
   return (
     <BaseLayout breadCrumb={["Home", "Users"]}>
       <Flex vertical gap={10}>
@@ -74,7 +86,11 @@ const UsersPage = () => {
             Add User
           </Button>
         </Flex>
-        <Table columns={columnsUsers} dataSource={dataUsers} />
+        <Table
+          columns={columnsUsers}
+          dataSource={normalizedData}
+          loading={isLoading}
+        />
       </Flex>
 
       <ModalAddUser
