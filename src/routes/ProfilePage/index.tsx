@@ -14,7 +14,7 @@ import useAuth from "../../hooks/useAuth";
 const { Title } = Typography;
 
 const ProfilePage = () => {
-  const { user, changePassword } = useAuth();
+  const { user, changePassword, logoutUser } = useAuth();
 
   const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
 
@@ -75,7 +75,7 @@ const ProfilePage = () => {
           <Button type="primary" onClick={() => setIsOpenResetPassword(true)}>
             Change Password
           </Button>
-          <Button danger ghost>
+          <Button danger ghost onClick={logoutUser}>
             Logout
           </Button>
         </Flex>

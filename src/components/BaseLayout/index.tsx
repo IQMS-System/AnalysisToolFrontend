@@ -22,6 +22,7 @@ import {
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import iqmsIcon from "../../assets/icon-iqms.png";
+import useAuth from "../../hooks/useAuth";
 
 interface Props {
   children: React.ReactNode;
@@ -102,7 +103,9 @@ const listMenu = menu.map((icon, index) => {
 });
 
 const BaseLayout = ({ children, breadCrumb }: Props) => {
+  const { logoutUser } = useAuth();
   const navigate = useNavigate();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -145,7 +148,9 @@ const BaseLayout = ({ children, breadCrumb }: Props) => {
         <Flex gap={10}>
           <Text className="text-white text-xl font-semibold">Ari</Text>
           <Text className="text-white text-xl font-semibold">|</Text>
-          <Button ghost>Logout</Button>
+          <Button ghost onClick={logoutUser}>
+            Logout
+          </Button>
         </Flex>
       </Header>
       <Layout style={{ minHeight: "92vh" }}>

@@ -7,8 +7,10 @@ import {
   ResetPasswordResponse,
   UserResponse,
 } from "./types";
+import { useNavigate } from "react-router-dom";
 
 const useAuth = () => {
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState<string | null>(() =>
     localStorage.getItem("accessToken")
   );
@@ -50,6 +52,12 @@ const useAuth = () => {
     return response;
   };
 
+  const logoutUser = () => {
+    localStorage.removeItem("accessToken");
+    setAccessToken(null);
+    navigate("/login");
+  };
+
   const userData = user?.data.user;
 
   useEffect(() => {
@@ -67,6 +75,7 @@ const useAuth = () => {
     isError: error,
     isAuthenticated: !!accessToken,
     changePassword,
+    logoutUser,
   };
 };
 
