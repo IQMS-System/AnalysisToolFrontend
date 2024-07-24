@@ -107,6 +107,26 @@ const BaseLayout = ({ children, breadCrumb }: Props) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const normalizedBreadCrumb = breadCrumb.map((item) => {
+    return {
+      title: item,
+    };
+  });
+
+  const normalizedMenu = listMenu.map((menu) => {
+    return {
+      key: menu.key,
+      icon: menu.icon,
+      onClick: () => navigate(menu.path),
+      label: menu.label,
+      style: {
+        height: "50px",
+        display: "flex",
+        alignItems: "center",
+      },
+    };
+  });
+
   return (
     <Layout>
       <Header
@@ -130,31 +150,13 @@ const BaseLayout = ({ children, breadCrumb }: Props) => {
       </Header>
       <Layout style={{ minHeight: "92vh" }}>
         <Sider width={230} style={{ background: colorBgContainer }}>
-          <Menu>
-            {listMenu.map((menu) => {
-              return (
-                <Menu.Item
-                  key={menu.key}
-                  icon={menu.icon}
-                  style={{
-                    height: "50px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  onClick={() => navigate(menu.path)}
-                >
-                  {menu.label}
-                </Menu.Item>
-              );
-            })}
-          </Menu>
+          <Menu items={normalizedMenu} />
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            {breadCrumb.map((item) => (
-              <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
-            ))}
-          </Breadcrumb>
+          <Breadcrumb
+            style={{ margin: "16px 0" }}
+            items={normalizedBreadCrumb}
+          />
           <Content
             style={{
               padding: 24,

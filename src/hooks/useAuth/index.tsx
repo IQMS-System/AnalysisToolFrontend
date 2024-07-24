@@ -46,6 +46,7 @@ const useAuth = () => {
     loginUser,
     isLoading: !error && !user,
     isError: error,
+    isAuthenticated: !!accessToken,
   };
 };
 
