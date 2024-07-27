@@ -8,6 +8,7 @@ import ModalEditUser from "./ModalEditUser";
 import ModalResetPassword from "./ModalResetPassword";
 import useUser from "../../hooks/useUser";
 import { CreateUserPayload } from "../../hooks/useUser/types";
+import { isAxiosError } from "axios";
 
 interface DataType {
   key: number;
@@ -34,17 +35,25 @@ const UsersPage = () => {
 
         setIsOpenAddUser(false);
         mutateUser();
-      } else {
-        message.open({
-          type: "error",
-          content: response.message[0],
-        });
       }
     } catch (err) {
-      message.open({
-        type: "error",
-        content: err as string,
-      });
+      if (isAxiosError(err)) {
+        const errorMessages = err.response?.data?.error;
+        if (errorMessages) {
+          Object.keys(errorMessages).forEach((field) => {
+            errorMessages[field].forEach((msg: string) => {
+              message.error(`${field}: ${msg}`);
+            });
+          });
+        } else {
+          message.error(
+            err.response?.data.message ||
+              "An error occurred while creating the user."
+          );
+        }
+      } else {
+        message.error("An error occurred while creating the user.");
+      }
     }
   };
 

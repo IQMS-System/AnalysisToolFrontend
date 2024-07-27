@@ -31,7 +31,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response) {
       const status = error.response.status;
-      if (status >= 400 && status < 500) {
+      if (status === 401) {
         localStorage.removeItem("accessToken");
       }
     }
