@@ -1,4 +1,4 @@
-import { Button, Flex, Space, Table, TableProps } from "antd";
+import { Button, Flex, Space, Table, TableProps, message } from "antd";
 import BaseLayout from "../../components/BaseLayout";
 import Title from "antd/es/typography/Title";
 import { UserAddOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import ModalEditUser from "./ModalEditUser";
 import ModalResetPassword from "./ModalResetPassword";
 import useUser from "../../hooks/useUser";
+import { CreateUserPayload } from "../../hooks/useUser/types";
 
 interface DataType {
   key: number;
@@ -16,10 +17,36 @@ interface DataType {
 }
 
 const UsersPage = () => {
-  const { listUser, isLoading } = useUser();
+  const { listUser, isLoading, createUser, mutateUser } = useUser();
   const [isOpenAddUser, setIsOpenAddUser] = useState(false);
   const [isOpenEditUser, setIsOpenEditUser] = useState(false);
   const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
+
+  const handleCreateUser = async (payload: CreateUserPayload) => {
+    try {
+      const response = await createUser(payload);
+
+      if (response.status_code === 200) {
+        message.open({
+          type: "success",
+          content: "Success Create User",
+        });
+
+        setIsOpenAddUser(false);
+        mutateUser();
+      } else {
+        message.open({
+          type: "error",
+          content: response.message[0],
+        });
+      }
+    } catch (err) {
+      message.open({
+        type: "error",
+        content: err as string,
+      });
+    }
+  };
 
   const columnsUsers: TableProps<DataType>["columns"] = [
     {
@@ -95,7 +122,7 @@ const UsersPage = () => {
 
       <ModalAddUser
         handleCancel={() => setIsOpenAddUser(false)}
-        handleOk={() => setIsOpenAddUser(false)}
+        handleOk={handleCreateUser}
         loading={false}
         open={isOpenAddUser}
       />

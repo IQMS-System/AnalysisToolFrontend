@@ -1,26 +1,40 @@
 import { Button, Form, Input, Modal, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { CreateUserPayload } from "../../hooks/useUser/types";
 
 interface Props {
   open: boolean;
-  handleOk: () => void;
+  handleOk: (payload: CreateUserPayload) => Promise<void>;
   handleCancel: () => void;
   loading: boolean;
 }
 
 type FieldType = {
-  name?: string;
-  level?: string;
-  username?: string;
-  password?: string;
+  name: string;
+  level: number;
+  username: string;
+  password: string;
+  email: string;
 };
 
 const ModalAddUser = ({ handleCancel, handleOk, open, loading }: Props) => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: FieldType) => {
+    const { level, name, password, username, email } = values;
+    await handleOk({
+      email: email,
+      level: level,
+      name: name,
+      password: password,
+      username: username,
+    });
+  };
+
   return (
     <Modal
       open={open}
       title="Add New User"
-      onOk={handleOk}
       onCancel={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
@@ -30,7 +44,9 @@ const ModalAddUser = ({ handleCancel, handleOk, open, loading }: Props) => {
           key="submit"
           type="primary"
           loading={loading}
-          onClick={handleOk}
+          onClick={() => {
+            form.submit();
+          }}
           icon={<PlusOutlined />}
         >
           Add
@@ -38,8 +54,9 @@ const ModalAddUser = ({ handleCancel, handleOk, open, loading }: Props) => {
       ]}
     >
       <Form
+        form={form}
         initialValues={{ remember: true }}
-        onFinish={() => {}}
+        onFinish={onFinish}
         onFinishFailed={() => {}}
         autoComplete="off"
         className="mt-5"
@@ -59,9 +76,9 @@ const ModalAddUser = ({ handleCancel, handleOk, open, loading }: Props) => {
           rules={[{ required: true, message: "Harap memilih level pengguna!" }]}
         >
           <Select>
-            <Select.Option value="operator">Operator</Select.Option>
-            <Select.Option value="supervisor">Supervisor</Select.Option>
-            <Select.Option value="admin">Admin</Select.Option>
+            <Select.Option value="3">Operator</Select.Option>
+            <Select.Option value="2">Supervisor</Select.Option>
+            <Select.Option value="1">Admin</Select.Option>
           </Select>
         </Form.Item>
 
@@ -69,6 +86,14 @@ const ModalAddUser = ({ handleCancel, handleOk, open, loading }: Props) => {
           label="Username"
           name="username"
           rules={[{ required: true, message: "Harap lengkapi username!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item<FieldType>
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: "Harap lengkapi email!" }]}
         >
           <Input />
         </Form.Item>
