@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import {
+  apiChangePasswordByAdmin,
   apiCreateUser,
   apiEditUser,
   apiFetchUserList,
@@ -10,6 +11,8 @@ import {
   EditUserPayload,
   EditUserResponse,
   ListUserResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
 } from "./types";
 
 const useUser = () => {
@@ -43,6 +46,14 @@ const useUser = () => {
     return response;
   };
 
+  const resetPasswordUser = async (
+    payload: ResetPasswordPayload
+  ): Promise<ResetPasswordResponse> => {
+    const response = await apiChangePasswordByAdmin(payload);
+
+    return response;
+  };
+
   const listUser = user?.data.users || [];
 
   return {
@@ -51,6 +62,7 @@ const useUser = () => {
     createUser,
     mutateUser: mutate,
     editUser,
+    resetPasswordUser,
   };
 };
 

@@ -48,3 +48,16 @@ export interface EditUserPayload {
   email: string;
   level: number;
 }
+
+export interface ResetPasswordPayload {
+  user_id: number;
+  password: string;
+  confirm_password: string;
+}
+
+export interface ResetPasswordResponse {
+  status_code: number;
+  message: string;
+  error: Error;
+  data: string;
+}

@@ -1,4 +1,8 @@
-import { CreateUserPayload, EditUserPayload } from "../hooks/useUser/types";
+import {
+  CreateUserPayload,
+  EditUserPayload,
+  ResetPasswordPayload,
+} from "../hooks/useUser/types";
 import apiClient from "./axiosConfig";
 
 const API_URL = "http://127.0.0.1:8000";
@@ -49,6 +53,19 @@ export const apiCreateUser = async (payload: CreateUserPayload) => {
 export const apiEditUser = async (payload: EditUserPayload) => {
   const response = await apiClient.post(
     `${API_URL}/user-configuration/update-user/`,
+    {
+      ...payload,
+    }
+  );
+
+  return response.data;
+};
+
+export const apiChangePasswordByAdmin = async (
+  payload: ResetPasswordPayload
+) => {
+  const response = await apiClient.post(
+    `${API_URL}/user-configuration/reset-password/`,
     {
       ...payload,
     }

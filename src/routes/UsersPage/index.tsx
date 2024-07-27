@@ -10,6 +10,7 @@ import useUser from "../../hooks/useUser";
 import {
   CreateUserPayload,
   EditUserPayload,
+  ResetPasswordPayload,
   User,
 } from "../../hooks/useUser/types";
 import { isAxiosError } from "axios";
@@ -24,7 +25,14 @@ interface DataType {
 }
 
 const UsersPage = () => {
-  const { listUser, isLoading, createUser, mutateUser, editUser } = useUser();
+  const {
+    listUser,
+    isLoading,
+    createUser,
+    mutateUser,
+    editUser,
+    resetPasswordUser,
+  } = useUser();
   const [selectedUser, setSelectedUser] = useState<User>();
   const [isOpenAddUser, setIsOpenAddUser] = useState(false);
   const [isOpenEditUser, setIsOpenEditUser] = useState(false);
@@ -86,6 +94,23 @@ const UsersPage = () => {
     }
   };
 
+  const handleResetPassword = async (payload: ResetPasswordPayload) => {
+    try {
+      const response = await resetPasswordUser(payload);
+
+      if (response.status_code === 200) {
+        message.open({
+          type: "success",
+          content: "Success Reset Password User",
+        });
+
+        setIsOpenResetPassword(false);
+      }
+    } catch (err) {
+      handleErrorAPI(err);
+    }
+  };
+
   const columnsUsers: TableProps<DataType>["columns"] = [
     {
       title: "No",
@@ -130,7 +155,17 @@ const UsersPage = () => {
           >
             Edit
           </Button>
-          <Button onClick={() => setIsOpenResetPassword(true)}>
+          <Button
+            onClick={() => {
+              setIsOpenResetPassword(true);
+              setSelectedUser({
+                email: record.email,
+                id: record.key,
+                name: record.fullName,
+                role: record.level,
+              });
+            }}
+          >
             Reset Password
           </Button>
         </Space>
@@ -186,9 +221,10 @@ const UsersPage = () => {
 
       <ModalResetPassword
         handleCancel={() => setIsOpenResetPassword(false)}
-        handleOk={() => setIsOpenResetPassword(false)}
+        handleOk={handleResetPassword}
         loading={false}
         open={isOpenResetPassword}
+        user={selectedUser}
       />
     </BaseLayout>
   );

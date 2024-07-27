@@ -1,10 +1,12 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
+import { ResetPasswordPayload, User } from "../../hooks/useUser/types";
 
 interface Props {
   open: boolean;
-  handleOk: () => void;
+  handleOk: (payload: ResetPasswordPayload) => Promise<void>;
   handleCancel: () => void;
   loading: boolean;
+  user?: User;
 }
 
 type FieldType = {
@@ -17,12 +19,28 @@ const ModalResetPassword = ({
   handleOk,
   loading,
   open,
+  user,
 }: Props) => {
+  const [form] = Form.useForm();
+
+  const onFinish = async (values: FieldType) => {
+    const { confirmPassword, password } = values;
+
+    if (user && confirmPassword && password) {
+      await handleOk({
+        confirm_password: confirmPassword,
+        password: password,
+        user_id: user.id,
+      });
+    } else {
+      message.error("User information is not available.");
+    }
+  };
+
   return (
     <Modal
       open={open}
       title="Reset Password User"
-      onOk={handleOk}
       onCancel={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
@@ -32,15 +50,18 @@ const ModalResetPassword = ({
           key="submit"
           type="primary"
           loading={loading}
-          onClick={handleOk}
+          onClick={() => {
+            form.submit();
+          }}
         >
           Reset
         </Button>,
       ]}
     >
       <Form
+        form={form}
         initialValues={{ remember: true }}
-        onFinish={() => {}}
+        onFinish={onFinish}
         onFinishFailed={() => {}}
         autoComplete="off"
         className="mt-5"
