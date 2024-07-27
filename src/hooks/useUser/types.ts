@@ -31,6 +31,20 @@ export interface CreateUserResponse {
   data: string;
 }
 
+export interface EditUserResponse {
+  status_code: number;
+  message: string;
+  error: Error;
+  data: string;
+}
+
 export interface Error {
   non_field_errors: string[];
+}
+
+export interface EditUserPayload {
+  user_id: number;
+  name: string;
+  email: string;
+  level: number;
 }

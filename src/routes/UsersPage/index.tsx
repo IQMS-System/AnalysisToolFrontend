@@ -7,21 +7,48 @@ import { useMemo, useState } from "react";
 import ModalEditUser from "./ModalEditUser";
 import ModalResetPassword from "./ModalResetPassword";
 import useUser from "../../hooks/useUser";
-import { CreateUserPayload } from "../../hooks/useUser/types";
+import {
+  CreateUserPayload,
+  EditUserPayload,
+  User,
+} from "../../hooks/useUser/types";
 import { isAxiosError } from "axios";
+
+type UserRole = "ADMIN" | "SUPERVISOR" | "OPERATOR";
 
 interface DataType {
   key: number;
   fullName: string;
   email: string;
-  level: "ADMIN" | "SUPERVISOR" | "OPERATOR";
+  level: UserRole;
 }
 
 const UsersPage = () => {
-  const { listUser, isLoading, createUser, mutateUser } = useUser();
+  const { listUser, isLoading, createUser, mutateUser, editUser } = useUser();
+  const [selectedUser, setSelectedUser] = useState<User>();
   const [isOpenAddUser, setIsOpenAddUser] = useState(false);
   const [isOpenEditUser, setIsOpenEditUser] = useState(false);
   const [isOpenResetPassword, setIsOpenResetPassword] = useState(false);
+
+  const handleErrorAPI = (err: unknown) => {
+    if (isAxiosError(err)) {
+      const errorMessages = err.response?.data?.error;
+      if (errorMessages) {
+        Object.keys(errorMessages).forEach((field) => {
+          errorMessages[field].forEach((msg: string) => {
+            message.error(`${field}: ${msg}`);
+          });
+        });
+      } else {
+        message.error(
+          err.response?.data.message ||
+            "An error occurred while creating the user."
+        );
+      }
+    } else {
+      message.error("An error occurred while creating the user.");
+    }
+  };
 
   const handleCreateUser = async (payload: CreateUserPayload) => {
     try {
@@ -37,23 +64,25 @@ const UsersPage = () => {
         mutateUser();
       }
     } catch (err) {
-      if (isAxiosError(err)) {
-        const errorMessages = err.response?.data?.error;
-        if (errorMessages) {
-          Object.keys(errorMessages).forEach((field) => {
-            errorMessages[field].forEach((msg: string) => {
-              message.error(`${field}: ${msg}`);
-            });
-          });
-        } else {
-          message.error(
-            err.response?.data.message ||
-              "An error occurred while creating the user."
-          );
-        }
-      } else {
-        message.error("An error occurred while creating the user.");
+      handleErrorAPI(err);
+    }
+  };
+
+  const handleEditUser = async (payload: EditUserPayload) => {
+    try {
+      const response = await editUser(payload);
+
+      if (response.status_code === 200) {
+        message.open({
+          type: "success",
+          content: "Success Edit User",
+        });
+
+        setIsOpenEditUser(false);
+        mutateUser();
       }
+    } catch (err) {
+      handleErrorAPI(err);
     }
   };
 
@@ -85,9 +114,20 @@ const UsersPage = () => {
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (record: DataType) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => setIsOpenEditUser(true)}>
+          <Button
+            type="primary"
+            onClick={() => {
+              setIsOpenEditUser(true);
+              setSelectedUser({
+                email: record.email,
+                id: record.key,
+                name: record.fullName,
+                role: record.level,
+              });
+            }}
+          >
             Edit
           </Button>
           <Button onClick={() => setIsOpenResetPassword(true)}>
@@ -138,9 +178,10 @@ const UsersPage = () => {
 
       <ModalEditUser
         handleCancel={() => setIsOpenEditUser(false)}
-        handleOk={() => setIsOpenEditUser(false)}
+        handleOk={handleEditUser}
         loading={false}
         open={isOpenEditUser}
+        user={selectedUser}
       />
 
       <ModalResetPassword

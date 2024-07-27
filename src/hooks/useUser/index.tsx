@@ -1,8 +1,14 @@
 import useSWR from "swr";
-import { apiCreateUser, apiFetchUserList } from "../../api/fetchers";
+import {
+  apiCreateUser,
+  apiEditUser,
+  apiFetchUserList,
+} from "../../api/fetchers";
 import {
   CreateUserPayload,
   CreateUserResponse,
+  EditUserPayload,
+  EditUserResponse,
   ListUserResponse,
 } from "./types";
 
@@ -29,6 +35,14 @@ const useUser = () => {
     return response;
   };
 
+  const editUser = async (
+    payload: EditUserPayload
+  ): Promise<EditUserResponse> => {
+    const response = await apiEditUser(payload);
+
+    return response;
+  };
+
   const listUser = user?.data.users || [];
 
   return {
@@ -36,6 +50,7 @@ const useUser = () => {
     isLoading,
     createUser,
     mutateUser: mutate,
+    editUser,
   };
 };
 

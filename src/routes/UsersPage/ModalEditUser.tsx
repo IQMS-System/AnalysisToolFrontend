@@ -1,22 +1,64 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
+import { EditUserPayload, User } from "../../hooks/useUser/types";
 
 interface Props {
   open: boolean;
-  handleOk: () => void;
+  handleOk: (payload: EditUserPayload) => Promise<void>;
   handleCancel: () => void;
   loading: boolean;
+  user?: User;
 }
 
 type FieldType = {
-  name?: string;
+  name: string;
 };
 
-const ModalEditUser = ({ handleCancel, handleOk, loading, open }: Props) => {
+enum UserRoleLevel {
+  ADMIN = 1,
+  SUPERVISOR = 2,
+  OPERATOR = 3,
+}
+
+const roleToLevelMap: Record<string, number> = {
+  ADMIN: UserRoleLevel.ADMIN,
+  SUPERVISOR: UserRoleLevel.SUPERVISOR,
+  OPERATOR: UserRoleLevel.OPERATOR,
+};
+
+type UserRole = "ADMIN" | "SUPERVISOR" | "OPERATOR";
+
+const ModalEditUser = ({
+  handleCancel,
+  handleOk,
+  loading,
+  open,
+  user,
+}: Props) => {
+  const [form] = Form.useForm();
+
+  const getRoleLevel = (role: UserRole): number => {
+    return roleToLevelMap[role] || -1; // Return -1 or any other default value if the role is not found
+  };
+
+  const onFinish = async (values: FieldType) => {
+    const { name } = values;
+
+    if (user) {
+      await handleOk({
+        email: user.email,
+        level: getRoleLevel(user?.role),
+        name: name,
+        user_id: user.id,
+      });
+    } else {
+      message.error("User information is not available.");
+    }
+  };
+
   return (
     <Modal
       open={open}
       title="Edit User"
-      onOk={handleOk}
       onCancel={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
@@ -26,15 +68,18 @@ const ModalEditUser = ({ handleCancel, handleOk, loading, open }: Props) => {
           key="submit"
           type="primary"
           loading={loading}
-          onClick={handleOk}
+          onClick={() => {
+            form.submit();
+          }}
         >
           Edit
         </Button>,
       ]}
     >
       <Form
+        form={form}
         initialValues={{ remember: true }}
-        onFinish={() => {}}
+        onFinish={onFinish}
         onFinishFailed={() => {}}
         autoComplete="off"
         className="mt-5"

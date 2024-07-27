@@ -1,4 +1,4 @@
-import { CreateUserPayload } from "../hooks/useUser/types";
+import { CreateUserPayload, EditUserPayload } from "../hooks/useUser/types";
 import apiClient from "./axiosConfig";
 
 const API_URL = "http://127.0.0.1:8000";
@@ -38,6 +38,17 @@ export const apiFetchUserList = async () => {
 export const apiCreateUser = async (payload: CreateUserPayload) => {
   const response = await apiClient.post(
     `${API_URL}/user-configuration/create-user/`,
+    {
+      ...payload,
+    }
+  );
+
+  return response.data;
+};
+
+export const apiEditUser = async (payload: EditUserPayload) => {
+  const response = await apiClient.post(
+    `${API_URL}/user-configuration/update-user/`,
     {
       ...payload,
     }
