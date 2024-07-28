@@ -5,9 +5,16 @@ import SpecificationTable from "./SpesificationTable";
 const { Item: FormItem } = Form;
 
 interface Specification {
-  key: string;
-  featureName: string;
-  nominalDimension: string;
+  id: string;
+  name: string;
+  nominal_dimension: string;
+  tolerance_upper_limit: string;
+  tolerance_lower_limit: string;
+  operation: string;
+  machine: string;
+  inspection_plan: string;
+  measuring_equipment: string;
+  product_description: string;
 }
 
 interface SubPart {
@@ -41,6 +48,42 @@ interface Assembly {
   showSpecifications: boolean;
 }
 
+// Cleaned types without 'id' and 'showSpecifications'
+interface CleanedSpecification {
+  name: string;
+  nominal_dimension: string;
+  tolerance_upper_limit: string;
+  tolerance_lower_limit: string;
+  operation: string;
+  machine: string;
+  inspection_plan: string;
+  measuring_equipment: string;
+  product_description: string;
+}
+
+interface CleanedSubPart {
+  name: string;
+  specifications: CleanedSpecification[];
+}
+
+interface CleanedPart {
+  name: string;
+  subParts: CleanedSubPart[];
+  specifications: CleanedSpecification[];
+}
+
+interface CleanedSubAssembly {
+  name: string;
+  parts: CleanedPart[];
+  specifications: CleanedSpecification[];
+}
+
+interface CleanedAssembly {
+  name: string;
+  subAssemblies: CleanedSubAssembly[];
+  specifications: CleanedSpecification[];
+}
+
 const AssemblyForm: React.FC = () => {
   const [assembly, setAssembly] = useState<Assembly>({
     id: "1",
@@ -50,9 +93,13 @@ const AssemblyForm: React.FC = () => {
     showSpecifications: false,
   });
 
+  function generateRandomId(): string {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
   const addSubAssembly = () => {
     const newSubAssembly: SubAssembly = {
-      id: (assembly.subAssemblies.length + 1).toString(),
+      id: generateRandomId(),
       name: "",
       parts: [],
       specifications: [],
@@ -84,7 +131,7 @@ const AssemblyForm: React.FC = () => {
               parts: [
                 ...subAssembly.parts,
                 {
-                  id: (subAssembly.parts.length + 1).toString(),
+                  id: generateRandomId(),
                   name: "",
                   subParts: [],
                   specifications: [],
@@ -131,7 +178,7 @@ const AssemblyForm: React.FC = () => {
                       subParts: [
                         ...part.subParts,
                         {
-                          id: (part.subParts.length + 1).toString(),
+                          id: generateRandomId(),
                           name: "",
                           specifications: [],
                           showSpecifications: false,
@@ -242,9 +289,16 @@ const AssemblyForm: React.FC = () => {
     type: "assembly" | "subAssembly" | "part" | "subPart"
   ) => {
     const newSpec: Specification = {
-      key: Date.now().toString(),
-      featureName: "",
-      nominalDimension: "",
+      id: Date.now().toString(),
+      name: "Default Name",
+      nominal_dimension: "0",
+      tolerance_upper_limit: "0",
+      tolerance_lower_limit: "0",
+      operation: "Default Operation",
+      machine: "Default Machine",
+      inspection_plan: "Default Plan",
+      measuring_equipment: "Default Equipment",
+      product_description: "Default Description",
     };
 
     const updateSpecs = (specs: Specification[]) => [...specs, newSpec];
@@ -375,8 +429,71 @@ const AssemblyForm: React.FC = () => {
     }
   };
 
+  function cleanAssembly(assembly: Assembly): CleanedAssembly {
+    const cleanedSubAssemblies: CleanedSubAssembly[] =
+      assembly.subAssemblies.map(cleanSubAssembly);
+    const cleanedSpecifications: CleanedSpecification[] =
+      assembly.specifications.map(cleanSpecification);
+
+    return {
+      name: assembly.name,
+      subAssemblies: cleanedSubAssemblies,
+      specifications: cleanedSpecifications,
+    };
+  }
+
+  function cleanSubAssembly(subAssembly: SubAssembly): CleanedSubAssembly {
+    const cleanedParts: CleanedPart[] = subAssembly.parts.map(cleanPart);
+    const cleanedSpecifications: CleanedSpecification[] =
+      subAssembly.specifications.map(cleanSpecification);
+
+    return {
+      name: subAssembly.name,
+      parts: cleanedParts,
+      specifications: cleanedSpecifications,
+    };
+  }
+
+  function cleanPart(part: Part): CleanedPart {
+    const cleanedSubParts: CleanedSubPart[] = part.subParts.map(cleanSubPart);
+    const cleanedSpecifications: CleanedSpecification[] =
+      part.specifications.map(cleanSpecification);
+
+    return {
+      name: part.name,
+      subParts: cleanedSubParts,
+      specifications: cleanedSpecifications,
+    };
+  }
+
+  function cleanSubPart(subPart: SubPart): CleanedSubPart {
+    const cleanedSpecifications: CleanedSpecification[] =
+      subPart.specifications.map(cleanSpecification);
+
+    return {
+      name: subPart.name,
+      specifications: cleanedSpecifications,
+    };
+  }
+
+  function cleanSpecification(
+    specification: Specification
+  ): CleanedSpecification {
+    return {
+      name: specification.name,
+      nominal_dimension: specification.nominal_dimension,
+      tolerance_upper_limit: specification.tolerance_upper_limit,
+      tolerance_lower_limit: specification.tolerance_lower_limit,
+      operation: specification.operation,
+      machine: specification.machine,
+      inspection_plan: specification.inspection_plan,
+      measuring_equipment: specification.measuring_equipment,
+      product_description: specification.product_description,
+    };
+  }
+
   return (
-    <div>
+    <div className="overflow-x-scroll">
       <Card title="Assembly">
         <Form layout="vertical">
           <FormItem label="Assembly Name">
@@ -570,7 +687,15 @@ const AssemblyForm: React.FC = () => {
         </Row>
       </Card>
 
-      <Button block className="mt-10" type="primary">
+      <Button
+        block
+        className="mt-10"
+        type="primary"
+        onClick={() => {
+          console.log("999 ini product assembly", assembly);
+          console.log("999 hasil pembersihan", cleanAssembly(assembly));
+        }}
+      >
         Create Product
       </Button>
     </div>
